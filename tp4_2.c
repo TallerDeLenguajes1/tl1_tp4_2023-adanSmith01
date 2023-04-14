@@ -72,10 +72,8 @@ int main(){
 
     //Liberación de memoria
     for(int i = 0; i < cantTareas; i++){
-        for(int j = 0; j < cantTareas; j++){
-            free(tareasPendientes[j]->Descripcion);
-            free(tareasRealizadas[j]->Descripcion);
-        }
+        free(tareasPendientes[i]->Descripcion);
+        free(tareasRealizadas[i]->Descripcion);
         free(tareasRealizadas[i]);
         free(tareasPendientes[i]);
     }

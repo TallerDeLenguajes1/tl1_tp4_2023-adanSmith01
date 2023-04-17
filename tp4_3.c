@@ -30,6 +30,7 @@ int main() {
     int buscar, idTarea;
     char* aux, *clave;
     Nodo* tareaBuscada;
+    //Inicialización de las listas de tareas
     Nodo* listaTareasP = crearListaTareasVacia();
     Nodo* listaTareasR = crearListaTareasVacia();
     puts("======BIENVENIDO/A======\n");
@@ -39,6 +40,7 @@ int main() {
     mostrarListaTareasR(listaTareasR);
     mostrarListaTareasP(listaTareasP);
     
+    //Interfaz de consulta de tareas
     do{
         printf("\n%cNecesita buscar alguna tarea espec%cfica? S%c(1) / No(0) : ", 168, 161, 161);
         scanf("%d", &buscar);
@@ -231,6 +233,7 @@ Nodo* buscarTareaPorID(Nodo* listaTareasP, Nodo* listaTareasR, int idTarea){
         
     }
 
+    //En el caso de que no se encuentre la tarea 
     if (auxTareasP == NULL & auxTareasR == NULL){
         return NULL;
     }
@@ -260,6 +263,7 @@ Nodo* buscarTareaPorPalabra(Nodo* listaTareasP, Nodo* listaTareasR, char* palabr
         
     }
 
+    //En el caso de que no se encuentre la tarea 
     if(auxTareasR == NULL && auxTareasR == NULL){
         return NULL;
     }

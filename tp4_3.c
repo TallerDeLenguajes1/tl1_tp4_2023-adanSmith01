@@ -25,7 +25,6 @@ void mostrarListaTareasR(Nodo* listaTareasR);
 Nodo* buscarTareaPorID(Nodo* listaTareasP, Nodo* listaTareasR, int idTarea);
 Nodo* buscarTareaPorPalabra(Nodo* listaTareasP, Nodo* listaTareasR, char* palabraClave);
 
-
 int main() {
     int buscar, idTarea;
     char* aux, *clave;

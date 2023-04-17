@@ -2,13 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-
+//Estructura de tipo Tarea
 typedef struct{
     int TareaID;
     char* Descripcion;
     int Duracion;
 }Tarea;
 
+//Estructura para las listas de tareas
 typedef struct Nodo{
     Tarea T;
     struct Nodo* Siguiente;
@@ -80,7 +81,7 @@ int main() {
     }while(buscar);
     
 
-    //Eliminar las listas de tareas pendientes y realizadas
+    //Eliminación todas las tareas de las listas de tareas pendientes y realizadas
     while(listaTareasP || listaTareasR){
         if(listaTareasP){
             free(listaTareasP->T.Descripcion);
@@ -101,10 +102,12 @@ int main() {
 
 // FUNCIONES
 
+//Función para crear una lista de tareas vacía
 Nodo* crearListaTareasVacia(){
     return NULL;
 }
 
+//Función para crear una tarea
 Nodo* crearTareaNodo(Tarea tarea){
     Nodo* nuevaTarea = (Nodo*)malloc(sizeof(Nodo));
     nuevaTarea->T.TareaID = tarea.TareaID;
@@ -115,12 +118,14 @@ Nodo* crearTareaNodo(Tarea tarea){
     return nuevaTarea;
 }
 
+//Función para insertar la tarea creada a una lista de tareas
 void insertarTareaNodo(Nodo** cabListaTareas, Tarea tarea){
     Nodo* nuevaTarea = crearTareaNodo(tarea);
     nuevaTarea->Siguiente = *cabListaTareas;
     *cabListaTareas = nuevaTarea;
 }
 
+//Función para eliminar una tarea de la lista
 void eliminarTareaNodo(Nodo** listaTareas, int idTarea){
     Nodo* tareaAnt = *listaTareas;
     Nodo* tareaAux = *listaTareas;
@@ -138,7 +143,7 @@ void eliminarTareaNodo(Nodo** listaTareas, int idTarea){
     free(tareaAux);
 }
 
-
+//Función para cargar las tareas pendientes a una lista
 void cargarListaTareasP(Nodo** cabListaTareasP) {
     int ingresarNueva, i = 0;
     Tarea auxT;
@@ -163,6 +168,7 @@ void cargarListaTareasP(Nodo** cabListaTareasP) {
     }while(ingresarNueva);
 }
 
+//Función para cargar las tareas realizadas a una lista
 void cargarListaTareasR(Nodo** cabListaTareasR, Nodo** cabListaTareasP){
     Nodo* tareaAux = *cabListaTareasP;
     int tareaRealizada;
@@ -177,6 +183,7 @@ void cargarListaTareasR(Nodo** cabListaTareasR, Nodo** cabListaTareasP){
     }
 }
 
+//Función para mostrar la lista de tareas pendientes
 void mostrarListaTareasP(Nodo* listaTareasP){
     Nodo* auxT = listaTareasP;
     puts("\n========LISTADO DE TAREAS PENDIENTES=======\n");
@@ -188,6 +195,7 @@ void mostrarListaTareasP(Nodo* listaTareasP){
     }
 }
 
+//Función para mostrar la lista de tareas realizadas
 void mostrarListaTareasR(Nodo* listaTareasR){
     Nodo* auxT = listaTareasR;
     puts("\n========LISTADO DE TAREAS REALIZADAS=======\n");
@@ -199,6 +207,7 @@ void mostrarListaTareasR(Nodo* listaTareasR){
     }
 }
 
+//Función para buscar una tarea entre las listas de tareas pendientes y realizadas según su ID
 Nodo* buscarTareaPorID(Nodo* listaTareasP, Nodo* listaTareasR, int idTarea){
     Nodo* auxTareasP = listaTareasP;
     Nodo* auxTareasR = listaTareasR;
@@ -227,6 +236,7 @@ Nodo* buscarTareaPorID(Nodo* listaTareasP, Nodo* listaTareasR, int idTarea){
     }
 }
 
+//Función para buscar una tarea entre las listas de tareas pendientes y realizadas según una palabra clave
 Nodo* buscarTareaPorPalabra(Nodo* listaTareasP, Nodo* listaTareasR, char* palabraClave){
     Nodo* auxTareasP = listaTareasP;
     Nodo* auxTareasR = listaTareasR;

@@ -13,14 +13,15 @@ void cargarTareasPendientes(Tarea** tareasP, int cantTareas);
 void cargarTareasRealizadas(Tarea ** tareasR, Tarea ** tareasP, int cantTareas);
 void mostrarTareasPendientes(Tarea** tareasP, int cantTareas);
 void mostrarTareasRealizadas(Tarea ** tareasR, int cantTareas);
-Tarea* buscarTareaV1(Tarea ** tareasR, Tarea** tareasP, int cantTareas, int tareaIDBuscada);
-Tarea* buscarTareaV2(Tarea ** tareasR, Tarea** tareasP, int cantTareas, char* palabraClave);
+Tarea* buscarTareaPorID(Tarea ** tareasR, Tarea** tareasP, int cantTareas, int tareaIDBuscada);
+Tarea* buscarTareaPorPalabra(Tarea ** tareasR, Tarea** tareasP, int cantTareas, char* palabraClave);
 
 int main(){
     int cantTareas, buscarTarea, id;
     char * aux, *clave;
     Tarea * tareaBuscada;
 
+    puts("======BIENVENIDO/A=======\n");
     //Se pregunta al usuario la cantidad de tareas a realizar
     printf("Determine la cantidad de tareas a realizar: ");
     scanf("%d", &cantTareas);
@@ -36,8 +37,8 @@ int main(){
     //Funciones para cargar y mostrar las tareas pendientes y las tareas realizadas
     cargarTareasPendientes(tareasPendientes, cantTareas);
     cargarTareasRealizadas(tareasRealizadas, tareasPendientes, cantTareas);
-    mostrarTareasPendientes(tareasPendientes, cantTareas);
     mostrarTareasRealizadas(tareasRealizadas, cantTareas);
+    mostrarTareasPendientes(tareasPendientes, cantTareas);
     
     //Interfaz para realizar la búsqueda de una tarea específica
     printf("\n%cNecesita buscar alguna tarea espec%cfica? S%c(1) / No(0) : ", 168, 161, 161);
@@ -51,7 +52,7 @@ int main(){
         if (strcmp(aux, "id") == 0){
             printf("\nIngrese el id de la tarea a buscar: ");
             scanf("%d", &id);
-            tareaBuscada = buscarTareaV1(tareasRealizadas, tareasPendientes, cantTareas, id);
+            tareaBuscada = buscarTareaPorID(tareasRealizadas, tareasPendientes, cantTareas, id);
             puts("\n=======TAREA BUSCADA POR ID======\n");
             printf("\nID de la tarea: %d\n", tareaBuscada->TareaID);
             printf("Descripci%cn: %s\n", 162, tareaBuscada->Descripcion);
@@ -60,7 +61,7 @@ int main(){
             printf("\nIngrese la palabra clave de la tarea a buscar: ");
             clave = (char *)malloc(20);
             gets(clave);
-            tareaBuscada = buscarTareaV2(tareasRealizadas, tareasPendientes, cantTareas, clave);
+            tareaBuscada = buscarTareaPorPalabra(tareasRealizadas, tareasPendientes, cantTareas, clave);
             puts("\n=======TAREA BUSCADA POR PALABRA CLAVE======\n");
             printf("\nID de la tarea: %d\n", tareaBuscada->TareaID);
             printf("Descripci%cn: %s\n", 162, tareaBuscada->Descripcion);
@@ -144,7 +145,7 @@ void mostrarTareasRealizadas(Tarea ** tareasR, int cantTareas){
 }
 
 //Función para buscar una tarea a partir de su ID
-Tarea* buscarTareaV1(Tarea ** tareasR, Tarea** tareasP, int cantTareas, int tareaIDBuscada){
+Tarea* buscarTareaPorID(Tarea ** tareasR, Tarea** tareasP, int cantTareas, int tareaIDBuscada){
     for(int i = 0; i < cantTareas; i++){
         if (tareasP[i]){
             if(tareaIDBuscada == tareasP[i]->TareaID){
@@ -159,7 +160,7 @@ Tarea* buscarTareaV1(Tarea ** tareasR, Tarea** tareasP, int cantTareas, int tare
 }
 
 //Función para buscar una tarea a partir de una palabra clave
-Tarea* buscarTareaV2(Tarea ** tareasR, Tarea** tareasP, int cantTareas, char* palabraClave){
+Tarea* buscarTareaPorPalabra(Tarea ** tareasR, Tarea** tareasP, int cantTareas, char* palabraClave){
 
     for(int i = 0; i < cantTareas; i++){
         if(tareasP[i]){

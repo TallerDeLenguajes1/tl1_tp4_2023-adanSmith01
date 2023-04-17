@@ -77,7 +77,7 @@ int main() {
             }
             free(aux);
         }
-    }while((tareaBuscada == NULL) || buscar);
+    }while(buscar);
     
 
     //Eliminar las listas de tareas pendientes y realizadas

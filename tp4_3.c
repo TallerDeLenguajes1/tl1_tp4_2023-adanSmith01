@@ -127,24 +127,6 @@ void insertarTareaNodo(Nodo** cabListaTareas, Tarea tarea){
     *cabListaTareas = nuevaTarea;
 }
 
-//Función para eliminar una tarea de la lista
-void eliminarTareaNodo(Nodo** listaTareas, int idTarea){
-    Nodo* tareaAnt = *listaTareas;
-    Nodo* tareaAux = *listaTareas;
-
-    while(tareaAux && tareaAux->T.TareaID != idTarea){
-        tareaAnt = tareaAux;
-        tareaAux = tareaAux->Siguiente;
-    }
-
-    if(tareaAux == *listaTareas){
-        *listaTareas = tareaAux->Siguiente;
-    }else{
-        tareaAnt->Siguiente = tareaAux->Siguiente;
-    }
-    free(tareaAux);
-}
-
 //Función para cargar las tareas pendientes a una lista
 void cargarListaTareasP(Nodo** cabListaTareasP) {
     int ingresarNueva, i = 0;
@@ -172,15 +154,23 @@ void cargarListaTareasP(Nodo** cabListaTareasP) {
 
 //Función para cargar las tareas realizadas a una lista
 void cargarListaTareasR(Nodo** cabListaTareasR, Nodo** cabListaTareasP){
+    Nodo* tareaAnt = *cabListaTareasP;
     Nodo* tareaAux = *cabListaTareasP;
     int tareaRealizada;
     while(tareaAux){
         printf("\n%cRealiz%c la tarea %d? S%c(1) / No(0): ", 168, 162, tareaAux->T.TareaID, 161);
         scanf("%d", &tareaRealizada);
         if(tareaRealizada){
-            insertarTareaNodo(cabListaTareasR, tareaAux->T);
-            eliminarTareaNodo(cabListaTareasP, tareaAux->T.TareaID);
+            tareaAnt->Siguiente = tareaAux->Siguiente;
+            if(*cabListaTareasR == NULL){
+                *cabListaTareasR = tareaAux;
+                (*cabListaTareasR)->Siguiente = NULL;
+            } else{
+                tareaAux->Siguiente = *cabListaTareasR;
+                *cabListaTareasR = tareaAux;
+            }
         }
+        tareaAnt = tareaAux;
         tareaAux = tareaAux->Siguiente;
     }
 }

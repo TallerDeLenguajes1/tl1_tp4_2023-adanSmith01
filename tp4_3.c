@@ -17,18 +17,18 @@ typedef struct Nodo{
 
 Nodo* crearListaTareasVacia();
 Nodo* crearTareaNodo(Tarea tarea);
-void insertarTareaNodo(Nodo** cabListaTareas, Tarea tarea);
+void insertarTareaNodo(Nodo** cabListaTareas, Nodo* tarea);
+Nodo* quitarTarea(Nodo** listaTarea, int idTareaAQuitar);
 void cargarListaTareasP(Nodo** cabListaTareasP);
 void cargarListaTareasR(Nodo** cabListaTareasR, Nodo** cabListaTareasP);
 void mostrarListaTareasP(Nodo* listaTareasP);
 void mostrarListaTareasR(Nodo* listaTareasR);
-Nodo* buscarTareaPorID(Nodo* listaTareasP, Nodo* listaTareasR, int idTarea);
-Nodo* buscarTareaPorPalabra(Nodo* listaTareasP, Nodo* listaTareasR, char* palabraClave);
+Nodo* buscarTareaPorID(Nodo* listaTareas, int idTarea);
+Nodo* buscarTareaPorPalabra(Nodo* listaTareas, char* palabraClave);
 
 int main() {
     int buscar, idTarea;
     char* aux, *clave;
-    Nodo* tareaBuscada;
     //Inicialización de las listas de tareas
     Nodo* listaTareasP = crearListaTareasVacia();
     Nodo* listaTareasR = crearListaTareasVacia();
@@ -45,39 +45,66 @@ int main() {
         scanf("%d", &buscar);
         if(buscar){
             fflush(stdin);
-            printf("\n%cDe qu%c manera quiere buscar la tarea? id / palabra clave: ", 168, 130);
-            aux = (char *)malloc(18);
-            gets(aux);
-            fflush(stdin);
-            if (strcmp(aux, "id") == 0){
-                printf("\nIngrese el id de la tarea a buscar: ");
-                scanf("%d", &idTarea);
-                tareaBuscada = buscarTareaPorID(listaTareasP, listaTareasR, idTarea);
-                if(tareaBuscada){
-                    puts("\n=======TAREA BUSCADA POR ID======\n");
-                    printf("\nID de la tarea: %d\n", tareaBuscada->T.TareaID);
-                    printf("Descripci%cn: %s\n", 162, tareaBuscada->T.Descripcion);
-                    printf("Duraci%cn: %d\n", 162, tareaBuscada->T.Duracion);
-                } else{
-                    printf("\nNo se encontr%c la tarea con el id = %d \n", 162, idTarea);
-                }
+            int invalido = 0;
+            Nodo* tareaBuscada = NULL;
+            do{
+                aux = (char*)malloc(20);
+                printf("\n%cDe qu%c manera quiere buscar la tarea? id / palabra clave: ", 168, 130);
+                gets(aux);
+                if (strcmp(aux, "id") == 0){
+                    invalido = 0;
+                    printf("\nIngrese el id de la tarea a buscar: ");
+                    scanf("%d", &idTarea);
+                
+                    if (buscarTareaPorID(listaTareasP, idTarea)){
+                        tareaBuscada = buscarTareaPorID(listaTareasP, idTarea);
+                    } else{
+                        if(buscarTareaPorID(listaTareasR, idTarea)){
+                            tareaBuscada = buscarTareaPorID(listaTareasR, idTarea);
+                        }
+                    }
+
+                    if(tareaBuscada){
+                        puts("\n=======TAREA BUSCADA POR ID======\n");
+                        printf("\nID de la tarea: %d\n", tareaBuscada->T.TareaID);
+                        printf("Descripci%cn: %s\n", 162, tareaBuscada->T.Descripcion);
+                        printf("Duraci%cn: %d\n", 162, tareaBuscada->T.Duracion);
+                    } else{
+                        printf("\nNo se encontr%c la tarea con el id = %d \n", 162, idTarea);
+                    }
             
-            } else{
-                printf("\nIngrese la palabra clave de la tarea a buscar: ");
-                clave = (char *)malloc(20);
-                gets(clave);
-                tareaBuscada = buscarTareaPorPalabra(listaTareasP, listaTareasR, clave);
-                if(tareaBuscada){
-                    puts("\n=======TAREA BUSCADA POR PALABRA CLAVE======\n");
-                    printf("\nID de la tarea: %d\n", tareaBuscada->T.TareaID);
-                    printf("Descripci%cn: %s\n", 162, tareaBuscada->T.Descripcion);
-                    printf("Duraci%cn: %d\n", 162, tareaBuscada->T.Duracion);
                 } else{
-                    printf("\nNo se encontr%c la tarea por la palabra clave \'%s\' \n", 162, clave);
+                    if(strcmp(aux, "palabra clave") == 0) {
+                        invalido = 0;
+                        printf("\nIngrese la palabra clave de la tarea a buscar: ");
+                        clave = (char *)malloc(20);
+                        gets(clave);
+                        if (buscarTareaPorPalabra(listaTareasP, clave)){
+                            tareaBuscada = buscarTareaPorPalabra(listaTareasP, clave);
+                        } else{
+                            if(buscarTareaPorPalabra(listaTareasR, clave)){
+                                tareaBuscada = buscarTareaPorPalabra(listaTareasR, clave);
+                            }
+                        }
+
+                        if(tareaBuscada){
+                            puts("\n=======TAREA BUSCADA POR PALABRA CLAVE======\n");
+                            printf("\nID de la tarea: %d\n", tareaBuscada->T.TareaID);
+                            printf("Descripci%cn: %s\n", 162, tareaBuscada->T.Descripcion);
+                            printf("Duraci%cn: %d\n", 162, tareaBuscada->T.Duracion);
+                        } else{
+                            printf("\nNo se encontr%c la tarea por la palabra clave \'%s\' \n", 162, clave);
+                        }
+
+                        free(clave);
+                    } else{
+                        invalido = 1;
+                    }
+            
                 }
-                free(clave);
-            }
-            free(aux);
+                free(aux);
+
+            }while(invalido);
         }
     }while(buscar);
     
@@ -120,8 +147,7 @@ Nodo* crearTareaNodo(Tarea tarea){
 }
 
 //Función para insertar la tarea creada a una lista de tareas
-void insertarTareaNodo(Nodo** cabListaTareas, Tarea tarea){
-    Nodo* nuevaTarea = crearTareaNodo(tarea);
+void insertarTareaNodo(Nodo** cabListaTareas, Nodo* nuevaTarea){
     nuevaTarea->Siguiente = *cabListaTareas;
     *cabListaTareas = nuevaTarea;
 }
@@ -129,22 +155,21 @@ void insertarTareaNodo(Nodo** cabListaTareas, Tarea tarea){
 //Función para cargar las tareas pendientes a una lista
 void cargarListaTareasP(Nodo** cabListaTareasP) {
     int ingresarNueva, i = 0;
-    Tarea auxT;
+    Tarea nuevaTarea;
     
     do{
         printf("\nTAREA %d a realizar: ", i);
         fflush(stdin);
-        auxT.TareaID = i;
-        auxT.Descripcion = (char*)malloc(200);
-        gets(auxT.Descripcion);
+        nuevaTarea.TareaID = i;
+        nuevaTarea.Descripcion = (char*)malloc(200);
+        gets(nuevaTarea.Descripcion);
         do{
             printf("Duraci%cn: ", 162);
-            scanf("%d", &auxT.Duracion);
-            if (auxT.Duracion < 10 || auxT.Duracion > 100) printf("La duracion debe ser un valor entre 10 y 100\n");
-        }while(auxT.Duracion < 10 || auxT.Duracion > 100);
-        insertarTareaNodo(cabListaTareasP, auxT);
-        free(auxT.Descripcion);
-        
+            scanf("%d", &nuevaTarea.Duracion);
+            if (nuevaTarea.Duracion < 10 || nuevaTarea.Duracion > 100) printf("La duracion debe ser un valor entre 10 y 100\n");
+        }while(nuevaTarea.Duracion < 10 || nuevaTarea.Duracion > 100);
+        Nodo* nuevoNodo = crearTareaNodo(nuevaTarea);
+        insertarTareaNodo(cabListaTareasP, nuevoNodo);
         printf("\n%cDesea ingresar otra tarea? S%c(1) / No(0): ", 168, 161);
         scanf("%d", &ingresarNueva);
         if (ingresarNueva) i++;
@@ -159,18 +184,21 @@ void cargarListaTareasR(Nodo** cabListaTareasR, Nodo** cabListaTareasP){
     while(tareaAux){
         printf("\n%cRealiz%c la tarea %d? S%c(1) / No(0): ", 168, 162, tareaAux->T.TareaID, 161);
         scanf("%d", &tareaRealizada);
-        if(tareaRealizada){
-            tareaAnt->Siguiente = tareaAux->Siguiente;
-            if(*cabListaTareasR == NULL){
-                *cabListaTareasR = tareaAux;
-                (*cabListaTareasR)->Siguiente = NULL;
+        if (tareaRealizada){
+            if(*cabListaTareasP == tareaAux){
+                *cabListaTareasP = tareaAux->Siguiente;
+                tareaAnt = tareaAux->Siguiente;
+                insertarTareaNodo(cabListaTareasR, tareaAux);
+                tareaAux = tareaAnt;
             } else{
-                tareaAux->Siguiente = *cabListaTareasR;
-                *cabListaTareasR = tareaAux;
+                tareaAnt->Siguiente = tareaAux->Siguiente;
+                insertarTareaNodo(cabListaTareasR, tareaAux);
+                tareaAux = tareaAnt->Siguiente;
             }
+        } else{
+            tareaAnt = tareaAux;
+            tareaAux = tareaAux->Siguiente;
         }
-        tareaAnt = tareaAux;
-        tareaAux = tareaAux->Siguiente;
     }
 }
 
@@ -199,62 +227,24 @@ void mostrarListaTareasR(Nodo* listaTareasR){
 }
 
 //Función para buscar una tarea entre las listas de tareas pendientes y realizadas según su ID
-Nodo* buscarTareaPorID(Nodo* listaTareasP, Nodo* listaTareasR, int idTarea){
-    Nodo* auxTareasP = listaTareasP;
-    Nodo* auxTareasR = listaTareasR;
+Nodo* buscarTareaPorID(Nodo* listaTareas, int idTarea){
+    Nodo* auxTareas = listaTareas;
 
-    while(auxTareasP || auxTareasR){
-        if(auxTareasP){
-            if(auxTareasP->T.TareaID == idTarea){
-                return auxTareasP;
-            } else{
-                auxTareasP = auxTareasP->Siguiente;
-            }
-        }
-
-        if(auxTareasR){
-            if(auxTareasR->T.TareaID == idTarea){
-                return auxTareasR;
-            } else{
-                auxTareasR = auxTareasR->Siguiente;
-            }
-        }
-        
+    while(auxTareas && auxTareas->T.TareaID != idTarea){
+        auxTareas = auxTareas->Siguiente;
     }
 
-    //En el caso de que no se encuentre la tarea 
-    if (auxTareasP == NULL & auxTareasR == NULL){
-        return NULL;
-    }
+    return auxTareas;
 }
 
 //Función para buscar una tarea entre las listas de tareas pendientes y realizadas según una palabra clave
-Nodo* buscarTareaPorPalabra(Nodo* listaTareasP, Nodo* listaTareasR, char* palabraClave){
-    Nodo* auxTareasP = listaTareasP;
-    Nodo* auxTareasR = listaTareasR;
+Nodo* buscarTareaPorPalabra(Nodo* listaTareas, char* palabraClave){
+    Nodo* auxTareas = listaTareas;
     
-    while(auxTareasP || auxTareasR){
-        if(auxTareasP){
-            if(strstr(auxTareasP->T.Descripcion, palabraClave)){
-                return auxTareasP;
-            } else{
-                auxTareasP = auxTareasP->Siguiente;
-            }
-        }
-
-        if(auxTareasR){
-            if(strstr(auxTareasR->T.Descripcion, palabraClave)){
-                return auxTareasR;
-            } else{
-                auxTareasR = auxTareasR->Siguiente;
-            }
-        }
-        
+    while(auxTareas && strstr(auxTareas->T.Descripcion, palabraClave) == NULL){
+        auxTareas = auxTareas->Siguiente;
     }
 
-    //En el caso de que no se encuentre la tarea 
-    if(auxTareasR == NULL && auxTareasR == NULL){
-        return NULL;
-    }
+    return auxTareas;
 
 }

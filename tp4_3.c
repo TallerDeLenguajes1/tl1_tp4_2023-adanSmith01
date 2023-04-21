@@ -18,7 +18,6 @@ typedef struct Nodo{
 Nodo* crearListaTareasVacia();
 Nodo* crearTareaNodo(Tarea tarea);
 void insertarTareaNodo(Nodo** cabListaTareas, Nodo* tarea);
-Nodo* quitarTarea(Nodo** listaTarea, int idTareaAQuitar);
 void cargarListaTareasP(Nodo** cabListaTareasP);
 void cargarListaTareasR(Nodo** cabListaTareasR, Nodo** cabListaTareasP);
 void mostrarListaTareasP(Nodo* listaTareasP);

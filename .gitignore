@@ -2,3 +2,6 @@
 *.exe
 *.obj
 *.o
+
+#Carpeta a ignorar
+.vscode/

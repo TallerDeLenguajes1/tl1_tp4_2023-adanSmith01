@@ -20,8 +20,7 @@ Nodo* crearTareaNodo(Tarea tarea);
 void insertarTareaNodo(Nodo** cabListaTareas, Nodo* tarea);
 void cargarListaTareasP(Nodo** cabListaTareasP);
 void cargarListaTareasR(Nodo** cabListaTareasR, Nodo** cabListaTareasP);
-void mostrarListaTareasP(Nodo* listaTareasP);
-void mostrarListaTareasR(Nodo* listaTareasR);
+void mostrarListaTareas(Nodo* listaTareas);
 Nodo* buscarTareaPorID(Nodo* listaTareas, int idTarea);
 Nodo* buscarTareaPorPalabra(Nodo* listaTareas, char* palabraClave);
 
@@ -35,8 +34,19 @@ int main() {
 
     cargarListaTareasP(&listaTareasP);
     cargarListaTareasR(&listaTareasR, &listaTareasP);
-    mostrarListaTareasR(listaTareasR);
-    mostrarListaTareasP(listaTareasP);
+    if(listaTareasR){
+        puts("\n========LISTADO DE TAREAS REALIZADAS=======\n");
+        mostrarListaTareas(listaTareasR);
+    } else{
+        printf("\nNo hay tareas realizadas\n");
+    }
+
+    if(listaTareasP){
+        puts("\n========LISTADO DE TAREAS PENDIENTES=======\n");
+        mostrarListaTareas(listaTareasP);
+    } else{
+        printf("\nNo hay tareas pendientes\n");
+    }
     
     //Interfaz de consulta de tareas
     do{
@@ -202,21 +212,8 @@ void cargarListaTareasR(Nodo** cabListaTareasR, Nodo** cabListaTareasP){
 }
 
 //Función para mostrar la lista de tareas pendientes
-void mostrarListaTareasP(Nodo* listaTareasP){
-    Nodo* auxT = listaTareasP;
-    puts("\n========LISTADO DE TAREAS PENDIENTES=======\n");
-    while(auxT){
-        printf("\nID de la tarea: %d\n", auxT->T.TareaID);
-        printf("Descripcion: %s\n", auxT->T.Descripcion);
-        printf("Duracion: %d\n", auxT->T.Duracion);
-        auxT = auxT->Siguiente;
-    }
-}
-
-//Función para mostrar la lista de tareas realizadas
-void mostrarListaTareasR(Nodo* listaTareasR){
-    Nodo* auxT = listaTareasR;
-    puts("\n========LISTADO DE TAREAS REALIZADAS=======\n");
+void mostrarListaTareas(Nodo* listaTareas){
+    Nodo* auxT = listaTareas;
     while(auxT){
         printf("\nID de la tarea: %d\n", auxT->T.TareaID);
         printf("Descripcion: %s\n", auxT->T.Descripcion);

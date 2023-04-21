@@ -211,7 +211,7 @@ void cargarListaTareasR(Nodo** cabListaTareasR, Nodo** cabListaTareasP){
     }
 }
 
-//Función para mostrar la lista de tareas pendientes
+//Función para mostrar la lista de tareas 
 void mostrarListaTareas(Nodo* listaTareas){
     Nodo* auxT = listaTareas;
     while(auxT){

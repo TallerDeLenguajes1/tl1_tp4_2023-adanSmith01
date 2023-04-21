@@ -18,6 +18,8 @@ typedef struct Nodo{
 Nodo* crearListaTareasVacia();
 Nodo* crearTareaNodo(Tarea tarea);
 void insertarTareaNodo(Nodo** cabListaTareas, Nodo* tarea);
+void quitarTarea(Nodo** listaTareas, Nodo* tareaAQuitar);
+void eliminarTarea(Nodo** listaTareas, Nodo* tareaAEliminar);
 void cargarListaTareasP(Nodo** cabListaTareasP);
 void cargarListaTareasR(Nodo** cabListaTareasR, Nodo** cabListaTareasP);
 void mostrarListaTareasP(Nodo* listaTareasP);
@@ -31,6 +33,8 @@ int main() {
     //Inicialización de las listas de tareas
     Nodo* listaTareasP = crearListaTareasVacia();
     Nodo* listaTareasR = crearListaTareasVacia();
+    //Inicialización de la lista de tareas en proceso
+    Nodo* TareasEnProceso = crearListaVacia();
     puts("======BIENVENIDO/A======\n");
 
     cargarListaTareasP(&listaTareasP);
@@ -149,6 +153,31 @@ Nodo* crearTareaNodo(Tarea tarea){
 void insertarTareaNodo(Nodo** cabListaTareas, Nodo* nuevaTarea){
     nuevaTarea->Siguiente = *cabListaTareas;
     *cabListaTareas = nuevaTarea;
+}
+
+//Función para quitar una tarea de una lista
+void quitarTarea(Nodo** listaTareas, Nodo* tareaAQuitar){
+    Nodo* tareaAnt = *listaTareas;
+    Nodo* tareaAux = *listaTareas;
+
+    while(tareaAux != tareaAQuitar){
+        tareaAnt = tareaAux;
+        tareaAux = tareaAux->Siguiente;
+    }
+
+    if(*listaTareas == tareaAQuitar){
+        *listaTareas = tareaAQuitar->Siguiente;
+    } else{
+        tareaAnt->Siguiente = tareaAQuitar->Siguiente;
+    }
+    tareaAQuitar->Siguiente = NULL;
+
+}
+
+void eliminarTarea(Nodo** listaTareas, Nodo* tareaAEliminar){
+    quitarTarea(listaTareas, tareaAEliminar);
+    free(tareaAEliminar->T.Descripcion);
+    free(tareaAEliminar);
 }
 
 //Función para cargar las tareas pendientes a una lista

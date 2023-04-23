@@ -10,8 +10,8 @@ int main() {
     cargarListaTareasP(&listaTareasP);
     menuPrincipal(&listaTareasP, &listaTareasR, &TareasEnProceso);    
 
-    //Eliminación todas las tareas de las listas de tareas pendientes y realizadas
-    while(listaTareasP || listaTareasR){
+    //Eliminación de todas las listas
+    while(listaTareasP || listaTareasR || TareasEnProceso){
         if(listaTareasP){
             free(listaTareasP->T.Descripcion);
             free(listaTareasP);
@@ -22,6 +22,12 @@ int main() {
             free(listaTareasR->T.Descripcion);
             free(listaTareasR);
             listaTareasR = listaTareasR->Siguiente;
+        }
+
+        if(TareasEnProceso){
+            free(TareasEnProceso->T.Descripcion);
+            free(TareasEnProceso);
+            TareasEnProceso = TareasEnProceso->Siguiente;
         }
     }
 

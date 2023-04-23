@@ -57,14 +57,14 @@ Nodo* quitarTarea(Nodo** listaTareas, Nodo* tareaAQuitar){
     return tareaAux;
 }
 
-//Función para eliminar una tarea
+//Función para eliminar una tarea de una lista
 void eliminarTarea(Nodo** listaTareas, Nodo* tarea){
     Nodo* tareaAEliminar = quitarTarea(listaTareas, tarea);
     free(tareaAEliminar->T.Descripcion);
     free(tareaAEliminar);
 }
 
-//Función para cargar las tareas pendientes a una lista
+//Función para cargar la lista de tareas pendientes
 void cargarListaTareasP(Nodo** cabListaTareasP) {
     int ingresarNueva, i = 0;
     Tarea nuevaTarea;
@@ -88,7 +88,7 @@ void cargarListaTareasP(Nodo** cabListaTareasP) {
     }while(ingresarNueva);
 }
 
-//Función para buscar una tarea entre las listas de tareas pendientes y realizadas según su ID
+//Función para buscar una tarea en una lista según su ID
 Nodo* buscarTareaPorID(Nodo* listaTareas, int idTarea){
     Nodo* auxTareas = listaTareas;
 
@@ -99,7 +99,7 @@ Nodo* buscarTareaPorID(Nodo* listaTareas, int idTarea){
     return auxTareas;
 }
 
-//Función para buscar una tarea entre las listas de tareas pendientes y realizadas según una palabra clave
+//Función para buscar una tarea en una lista según una palabra clave
 Nodo* buscarTareaPorPalabra(Nodo* listaTareas, char* palabraClave){
     Nodo* auxTareas = listaTareas;
     
@@ -111,12 +111,12 @@ Nodo* buscarTareaPorPalabra(Nodo* listaTareas, char* palabraClave){
 
 }
 
-//Función para cargar las tareas realizadas a una lista
+//Función para mover tareas de una lista a otra
 void moverTarea(Nodo** cabListaTareasR, Nodo** cabListaTareasP, Nodo** cabTareasEnProceso, int idTarea){
     int lista;
     Nodo* nuevaTarea;
     if(buscarTareaPorID(*cabListaTareasP, idTarea)){
-        printf("\nA que lista la quieres mover? En Proceso(1) / Realizadas(2): ");
+        printf("\n%cA qu%c lista la quieres mover? En Proceso(1) / Realizadas(2): ", 168, 130);
         scanf("%d", &lista);
         nuevaTarea = quitarTarea(cabListaTareasP, buscarTareaPorID(*cabListaTareasP, idTarea));
         if(lista == 1){
@@ -142,8 +142,8 @@ void mostrarListaTareas(Nodo* listaTareas){
     } else{
         while(auxT){
             printf("\nID de la tarea: %d\n", auxT->T.TareaID);
-            printf("Descripcion: %s\n", auxT->T.Descripcion);
-            printf("Duracion: %d\n", auxT->T.Duracion);
+            printf("Descripci%cn: %s\n", 162, auxT->T.Descripcion);
+            printf("Duraci%cn: %d\n", 162, auxT->T.Duracion);
             auxT = auxT->Siguiente;
         }
     }
@@ -153,21 +153,19 @@ void mostrarListaTareas(Nodo* listaTareas){
 void mostrarDatos(Nodo* listaTareas){
     int contTareas = 0, duracionTotal = 0;
     Nodo* auxT = listaTareas;
-    if(auxT == NULL){
-        printf("\nCantidad total de tareas: %d\n", contTareas);
-        printf("\nTiempo total de duracion: %d\n", duracionTotal);
-    } else{
+    if(auxT != NULL){
         while(auxT){
             contTareas++;
             duracionTotal += auxT->T.Duracion;
             auxT = auxT->Siguiente;
-        }
+        }  
+    } 
 
-        printf("\nCantidad total de tareas: %d\n", contTareas);
-        printf("\nTiempo total de duracion: %d\n", duracionTotal);
-    }
+    printf("\nCantidad total de tareas: %d\n", contTareas);
+    printf("\nTiempo total de duraci%cn: %d\n", 162, duracionTotal);
 }
 
+//Función que verifica si una tarea se encuentra en una lista según su ID
 int estaTareaEnLista(Nodo* listaTareas, int idTarea){
     if(buscarTareaPorID(listaTareas, idTarea)){
         return 1;
@@ -176,6 +174,7 @@ int estaTareaEnLista(Nodo* listaTareas, int idTarea){
     }
 }
 
+//Función para la interfaz de consulta de tareas
 void consultaTareas(Nodo* TareasP, Nodo* TareasR, Nodo* TareasEnProceso){
     int buscar, invalido = 0, idTarea;
     char *clave, *aux, *estado;
@@ -243,8 +242,9 @@ void consultaTareas(Nodo* TareasP, Nodo* TareasR, Nodo* TareasEnProceso){
                         printf("\nID de la tarea: %d\n", tareaBuscada->T.TareaID);
                         printf("Descripci%cn: %s\n", 162, tareaBuscada->T.Descripcion);
                         printf("Duraci%cn: %d\n", 162, tareaBuscada->T.Duracion);
+                        printf("Estado: %s", estado);
                     } else{
-                        printf("\nNo se encontr%c la tarea con el id = %d \n", 162, idTarea);
+                        printf("\nNo se encontr%c la tarea con la palabra clave '%s' \n", 162, clave);
                     }
 
                     free(clave);
@@ -260,6 +260,7 @@ void consultaTareas(Nodo* TareasP, Nodo* TareasR, Nodo* TareasEnProceso){
     }while(buscar);
 }
 
+//Función para la interfaz de usuario para hacer operaciones con una tarea seleccionada
 void operacionesTarea(Nodo** TareasP, Nodo** TareasR, Nodo** TareasEnProceso){
     int idTarea, modificarOtra, operacion;
     do{
@@ -271,15 +272,15 @@ void operacionesTarea(Nodo** TareasP, Nodo** TareasR, Nodo** TareasEnProceso){
         mostrarListaTareas(*TareasP);
 
         do{
-            printf("\nQue tarea desea seleccionar? Indique el ID de la tarea: ");
+            printf("\n%cQu%c tarea desea seleccionar? Indique el ID de la tarea: ", 168, 130);
             scanf("%d", &idTarea);
         }while(estaTareaEnLista(*TareasP, idTarea) != 1 && estaTareaEnLista(*TareasR, idTarea) != 1 && estaTareaEnLista(*TareasEnProceso, idTarea) != 1);
 
-        printf("\n*********MENU DE OPERACIONES PARA LA TAREA %d********\n", idTarea);
+        printf("\n*********MEN%c DE OPERACIONES PARA LA TAREA %d********\n", 233, idTarea);
         puts("1- Mover a otra lista.");
         puts("2- Eliminar tarea.");
         puts("3- No hacer nada\n");
-        printf("Elija la operacion: ");
+        printf("Elija la operaci%cn: ", 162);
         scanf("%d", &operacion);
 
         if(operacion == 1) moverTarea(TareasR, TareasP, TareasEnProceso, idTarea);
@@ -295,14 +296,15 @@ void operacionesTarea(Nodo** TareasP, Nodo** TareasR, Nodo** TareasEnProceso){
 
 }
 
+//Función para el menú principal
 void menuPrincipal(Nodo** TareasP, Nodo** TareasR, Nodo** TareasEnProceso){
     int opcion;
     do{
-        puts("\n*********MENU PRINCIPAL********\n");
+        printf("\n*********MEN%c PRINCIPAL********\n", 233);
         puts("1- Consultar una tarea.");
         puts("2- Operar una tarea.");
         puts("3- Salir\n");
-        printf("Elija una opcion: ");
+        printf("Elija una opci%cn: ", 162);
         scanf("%d", &opcion);
 
         if(opcion == 1) consultaTareas(*TareasP, *TareasR, *TareasEnProceso);

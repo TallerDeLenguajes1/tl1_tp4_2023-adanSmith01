@@ -11,25 +11,8 @@ int main() {
     menuPrincipal(&listaTareasP, &listaTareasR, &TareasEnProceso);    
 
     //Eliminación de todas las listas
-    while(listaTareasP || listaTareasR || TareasEnProceso){
-        if(listaTareasP){
-            free(listaTareasP->T.Descripcion);
-            free(listaTareasP);
-            listaTareasP = listaTareasP->Siguiente;
-        }
-        
-        if(listaTareasR){
-            free(listaTareasR->T.Descripcion);
-            free(listaTareasR);
-            listaTareasR = listaTareasR->Siguiente;
-        }
-
-        if(TareasEnProceso){
-            free(TareasEnProceso->T.Descripcion);
-            free(TareasEnProceso);
-            TareasEnProceso = TareasEnProceso->Siguiente;
-        }
-    }
-
+    eliminarLista(&listaTareasP);
+    eliminarLista(&listaTareasR);
+    eliminarLista(&TareasEnProceso);
     return 0;
 }

@@ -30,6 +30,8 @@ int main() {
     //Inicialización de las listas de tareas
     Nodo* listaTareasP = crearListaTareasVacia();
     Nodo* listaTareasR = crearListaTareasVacia();
+    Nodo* auxListaP;
+    Nodo* auxListaR;
     puts("======BIENVENIDO/A======\n");
 
     cargarListaTareasP(&listaTareasP);
@@ -119,17 +121,21 @@ int main() {
     
 
     //Eliminación todas las tareas de las listas de tareas pendientes y realizadas
+    auxListaP = listaTareasP;
+    auxListaR = listaTareasR;
     while(listaTareasP || listaTareasR){
         if(listaTareasP){
-            free(listaTareasP->T.Descripcion);
-            free(listaTareasP);
             listaTareasP = listaTareasP->Siguiente;
+            free(auxListaP->T.Descripcion);
+            free(auxListaP);
+            auxListaP = listaTareasP;
         }
-        
+
         if(listaTareasR){
-            free(listaTareasR->T.Descripcion);
-            free(listaTareasR);
             listaTareasR = listaTareasR->Siguiente;
+            free(auxListaR->T.Descripcion);
+            free(auxListaR);
+            auxListaR = listaTareasR;
         }
     }
 

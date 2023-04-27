@@ -337,9 +337,12 @@ void menuPrincipal(Nodo** TareasP, Nodo** TareasR, Nodo** TareasEnProceso){
 }
 
 void eliminarLista(Nodo** listaTareas){
+    Nodo* ant = *listaTareas;
     while(*listaTareas){
-        free((*listaTareas)->T.Descripcion);
-        free(*listaTareas);
         *listaTareas = (*listaTareas)->Siguiente;
+
+        free(ant->T.Descripcion);
+        free(ant);
+        ant = *listaTareas;
     }
 }
